@@ -40,7 +40,7 @@ Découvrez la plateforme en action avec ces captures d'écran en mode sombre et 
 1. **Cloner le dépôt** :
 
     ```bash
-    git clone https://github.com/bugs_shadow/data-platform.git
+    git clone https://github.com/bugshadow/Data-platform.git
     cd data-platform
     ```
 

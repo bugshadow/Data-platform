@@ -1,0 +1,207 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500;600;700&display=swap");
+
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #F5A623;
+    --background-color: #f8f9fa;
+    --text-color: #2c3e50;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+[data-theme="dark"] {
+    --primary-color: #6fa8dc;
+    --secondary-color: #ffb347;
+    --background-color: #1a1f25;
+    --text-color: #ffffff;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    background-color: var(--background-color);
+    font-family: "Source Code Pro", monospace;
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.1); /* Fond semi-transparent pour le mode clair */
+    backdrop-filter: blur(10px); /* Effet de flou */
+    box-shadow: var(--box-shadow);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Bordure légère */
+    --text-color: #ffffff;
+}
+
+[data-theme="dark"] .navbar {
+    background: rgba(26, 31, 37, 0.1); /* Fond semi-transparent pour le mode sombre */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Bordure légère pour le mode sombre */
+    --text-color: #ffffff;
+}
+
+.navbar .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.navbar .auth-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.navbar .auth-buttons .btn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.navbar .auth-buttons .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.navbar .auth-buttons .btn-primary:hover {
+    background-color: #357ABD;
+    transform: translateY(-2px);
+}
+
+.navbar .auth-buttons .btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.navbar .auth-buttons .btn-secondary:hover {
+    background-color: #D88E1F;
+    transform: translateY(-2px);
+}
+
+.navbar .auth-buttons .theme-toggle {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.navbar .auth-buttons .theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+.auth-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*background: linear-gradient(135deg, #1a1f25 0%, #2c3e50 100%);*/
+    color: white;
+}
+
+.auth-container {
+    background: var(--background-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.auth-container h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: var(--text-color);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.auth-container p {
+    margin-top: 1rem;
+    color: var(--text-color);
+}
+
+.auth-container a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-container a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #ff4d4d;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background-color: #357ABD;
+    transform: translateY(-2px);
+}

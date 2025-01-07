@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!-- Déclaration du type de document comme étant HTML5 -->
+{% load static %}
+<!-- Balise Django pour charger les fichiers statiques (CSS, JS, images, etc.) -->
+<html lang="fr">
+<!-- Début du document HTML avec la langue définie sur le français -->
+<head>
+    <!-- Section d'en-tête du document -->
+    <meta charset="UTF-8">
+    <!-- Définit l'encodage des caractères comme UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Assure que la page est responsive en ajustant la largeur à celle de l'appareil -->
+    <title>Analyseur de Données - Interface Moderne</title>
+    <!-- Titre de la page qui apparaît dans l'onglet du navigateur -->
+    
+    <!-- Charge le fichier CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Lien vers le fichier CSS pour styliser la page -->
+    
+    <!-- Charge les bibliothèques externes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.24.2/plotly.min.js"></script>
+    <!-- Bibliothèque Plotly pour les visualisations de données -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Bibliothèque PapaParse pour l'analyse de fichiers CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Bibliothèque Three.js pour les animations 3D -->
+    
+    <!-- Charge le fichier JavaScript local avec l'attribut defer -->
+    <script src="{% static 'js/script.js' %}" defer></script>
+    <!-- Lien vers le fichier JavaScript, chargé en différé (après le chargement du HTML) -->
+</head>
+<body>
+    <!-- Corps du document HTML -->
+
+    <!-- Canvas pour l'animation de fond -->
+    <canvas id="animation-bg"></canvas>
+    <!-- Canvas utilisé pour afficher une animation en arrière-plan -->
+
+    <!-- Bouton pour basculer entre les thèmes clair et sombre -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Basculer entre le mode sombre et clair">🌙</button>
+    <!-- Bouton avec une icône de lune pour changer le thème -->
+
+    <!-- Cercle utilisateur avec menu déroulant -->
+    <div class="user-circle" id="user-circle">
+        👤
+        <!-- Icône utilisateur -->
+        <div class="user-dropdown" id="user-dropdown">
+            <!-- Menu déroulant pour les actions utilisateur -->
+            <button onclick="window.location.href='/logout/'">Déconnexion</button>
+            <!-- Bouton pour se déconnecter -->
+        </div>
+    </div>
+
+    <!-- Conteneur principal -->
+    <div class="container">
+        <!-- En-tête de la page -->
+        <header class="header">
+            <h1 id="animated-text">Analyseur de Données</h1>
+            <!-- Titre animé de la page -->
+            <p>Importez, analysez et visualisez vos données en quelques clics</p>
+            <!-- Description de la page -->
+        </header>
+
+        <!-- Grille pour les cartes fonctionnelles -->
+        <div class="grid">
+            <!-- Carte : Import de données -->
+            <div class="card">
+                <h2>Import de données</h2>
+                <!-- Titre de la carte -->
+                <div class="form-group">
+                    <label class="form-label" for="csv-input">Sélectionnez votre fichier CSV</label>
+                    <!-- Étiquette pour le champ de sélection de fichier -->
+                    <input type="file" id="csv-input" accept=".csv" class="form-control">
+                    <!-- Champ pour sélectionner un fichier CSV -->
+                </div>
+                <button id="upload-btn" class="btn btn-primary">Importer</button>
+                <!-- Bouton pour importer le fichier CSV -->
+                <button id="download-btn" class="btn btn-secondary" style="margin-top: 10px;" disabled>Télécharger CSV traité</button>
+                <!-- Bouton pour télécharger le fichier CSV traité (désactivé par défaut) -->
+            </div>
+
+            <!-- Carte : Sélection des données et Statistiques -->
+            <div class="card">
+                <h2>Sélection des données et Statistiques</h2>
+                <!-- Titre de la carte -->
+                <div class="form-group">
+                    <label class="form-label" for="column-select">Colonne</label>
+                    <!-- Étiquette pour la sélection de colonne -->
+                    <select id="column-select" class="form-control" disabled>
+                        <!-- Menu déroulant pour sélectionner une colonne (désactivé par défaut) -->
+                        <option value="">Sélectionnez une colonne</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="start-row">Range de lignes</label>
+                    <!-- Étiquette pour la sélection de la plage de lignes -->
+                    <div class="range-group">
+                        <input type="number" id="start-row" class="form-control" placeholder="Début" min="0">
+                        <!-- Champ pour le début de la plage -->
+                        <input type="number" id="end-row" class="form-control" placeholder="Fin" min="0">
+                        <!-- Champ pour la fin de la plage -->
+                    </div>
+                </div>
+                <button id="calculate-stats-btn" class="btn btn-primary">Calculer les Statistiques</button>
+                <!-- Bouton pour calculer les statistiques -->
+            </div>
+
+            <!-- Carte : Accéder à une ligne ou une colonne -->
+            <div class="card">
+                <h2>Accéder à une ligne ou une colonne</h2>
+                <!-- Titre de la carte -->
+                <div class="form-group">
+                    <label class="form-label" for="row-index">Index de ligne</label>
+                    <!-- Étiquette pour l'index de ligne -->
+                    <input type="number" id="row-index" class="form-control" placeholder="Entrez un index de ligne" min="0">
+                    <!-- Champ pour entrer l'index de ligne -->
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="column-name">Nom de colonne</label>
+                    <!-- Étiquette pour le nom de colonne -->
+                    <input type="text" id="column-name" class="form-control" placeholder="Entrez le nom d'une colonne">
+                    <!-- Champ pour entrer le nom de colonne -->
+                </div>
+                <button id="display-data-btn" class="btn btn-primary">Afficher les données</button>
+                <!-- Bouton pour afficher les données -->
+            </div>
+
+            <!-- Carte : Visualisation -->
+            <div class="card">
+                <h2>Visualisation</h2>
+                <!-- Titre de la carte -->
+                <div class="form-group">
+                    <label class="form-label" for="viz-column-select">Colonne à visualiser</label>
+                    <!-- Étiquette pour la sélection de colonne à visualiser -->
+                    <select id="viz-column-select" class="form-control" disabled>
+                        <!-- Menu déroulant pour sélectionner une colonne (désactivé par défaut) -->
+                        <option value="">Sélectionnez une colonne</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="viz-type">Type de visualisation</label>
+                    <!-- Étiquette pour la sélection du type de visualisation -->
+                    <select id="viz-type" class="form-control" disabled>
+                        <!-- Menu déroulant pour sélectionner le type de visualisation (désactivé par défaut) -->
+                        <option value="histogram">Histogramme</option>
+                        <option value="box">Boîte à moustaches</option>
+                        <option value="scatter">Nuage de points</option>
+                        <option value="time_series">Série temporelle</option>
+                        <option value="violin">Violon</option>
+                        <option value="heatmap">Heatmap</option>
+                        <option value="pairplot">Pair Plot</option>
+                        <option value="pie">Diagramme circulaire</option>
+                        <option value="area">Graphique en aires</option>
+                        <option value="density_contour">Contour de densité</option>
+                    </select>
+                </div>
+                <button id="generate-viz-btn" class="btn btn-primary" disabled>Générer la visualisation</button>
+                <!-- Bouton pour générer la visualisation (désactivé par défaut) -->
+            </div>
+        </div>
+
+        <!-- Carte : Aperçu des données -->
+        <div class="card">
+            <h2>Aperçu des données</h2>
+            <!-- Titre de la carte -->
+            <div id="data-preview" class="table-responsive">
+                <!-- Conteneur pour l'aperçu des données -->
+                <table class="styled-table">
+                    <!-- Tableau pour afficher les données -->
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <!-- En-tête de colonne -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Corps du tableau (vide par défaut) -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="no-data-message" class="no-data" style="display: none;">Aucune donnée à afficher</div>
+            <!-- Message affiché lorsqu'il n'y a pas de données -->
+        </div>
+
+        <!-- Carte : Statistiques -->
+        <div class="card">
+            <h2>Statistiques</h2>
+            <!-- Titre de la carte -->
+            <div class="stats-grid" id="stats-container"></div>
+            <!-- Conteneur pour afficher les statistiques -->
+        </div>
+
+        <!-- Carte : Visualisation -->
+        <div class="card">
+            <h2>Visualisation</h2>
+            <!-- Titre de la carte -->
+            <div id="visualization" class="visualization-container"></div>
+            <!-- Conteneur pour afficher les visualisations -->
+            <div id="no-viz-message" class="no-data" style="display: none;">Aucune visualisation disponible</div>
+            <!-- Message affiché lorsqu'il n'y a pas de visualisation -->
+        </div>
+
+        <!-- Indicateur de chargement -->
+        <div class="loader" id="loader"></div>
+        <!-- Indicateur visuel pour montrer que la page est en cours de chargement -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,110 @@
+/* static/css/animations.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #0a0a1f; /* Couleur de fond par défaut */
+    overflow: hidden;
+}
+
+.data-flow-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    perspective: 1000px;
+    z-index: -1; /* Place l'animation en arrière-plan */
+}
+
+.wifi-wave {
+    position: absolute;
+    border: 2px solid rgba(0, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: wifiPulse 4s ease-out infinite;
+}
+
+@keyframes wifiPulse {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.digital-particle {
+    position: absolute;
+    background: radial-gradient(circle at center, #00ffff, transparent 70%);
+    border-radius: 50%;
+    filter: blur(1px);
+}
+
+.data-stream {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ffff, transparent);
+    transform-origin: left;
+    animation: streamFlow 3s linear infinite;
+}
+
+@keyframes streamFlow {
+    0% {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: scaleX(1);
+        opacity: 0;
+    }
+}
+
+.connection-node {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #00ffff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+.hexagonal-grid {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(90deg, transparent 95%, rgba(0, 255, 255, 0.1) 100%),
+        linear-gradient(60deg, transparent 95%, rgba(0, 255, 255, 0.1) 100%),
+        linear-gradient(-60deg, transparent 95%, rgba(0, 255, 255, 0.1) 100%);
+    background-size: 50px 50px;
+    animation: gridPulse 4s ease-in-out infinite;
+    opacity: 0.3;
+    z-index: -1; /* Place l'animation en arrière-plan */
+}
+
+@keyframes gridPulse {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Place l'animation en arrière-plan */
+}

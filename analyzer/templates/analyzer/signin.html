@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Data Platform</title>
+    <!-- Charge les fichiers CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles3.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    <!-- Charge le fichier JavaScript -->
+    <script src="{% static 'js/animations.js' %}" defer></script>
+    <script src="{% static 'js/script3.js' %}" defer></script>
+</head>
+<body>
+    <!-- Barre de navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='/'">Data Platform</div>
+        <div class="auth-buttons">
+            <button class="btn btn-primary" onclick="window.location.href='/signup/'">Sign Up</button>
+            <button class="btn btn-secondary" onclick="window.location.href='/signin/'">Sign In</button>
+            <button class="theme-toggle" id="theme-toggle">🌙</button>
+        </div>
+    </nav>
+
+    <!-- Animation de fond -->
+    <div class="hexagonal-grid"></div>
+    <canvas id="dataCanvas"></canvas>
+    <div class="data-flow-container" id="flowContainer"></div>
+
+    <!-- Formulaire de connexion -->
+    <section class="auth-section">
+        <div class="auth-container">
+            <h2>Connectez-vous</h2>
+            <form id="signin-form">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+            <p>Vous n'avez pas de compte ? <a href="/signup/">Inscrivez-vous ici</a>.</p>
+            <!-- Message d'erreur -->
+            <div id="error-message" class="error-message"></div>
+        </div>
+    </section>
+</body>
+</html>

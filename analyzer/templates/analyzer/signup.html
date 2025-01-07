@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!-- Déclaration du type de document comme étant HTML5 -->
+{% load static %}
+<!-- Balise Django pour charger les fichiers statiques (CSS, JS, images, etc.) -->
+<html lang="fr">
+<!-- Début du document HTML avec la langue définie sur le français -->
+<head>
+    <!-- Section d'en-tête du document -->
+    <meta charset="UTF-8">
+    <!-- Définit l'encodage des caractères comme UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Assure que la page est responsive en ajustant la largeur à celle de l'appareil -->
+    <title>Sign Up - Data Platform</title>
+    <!-- Titre de la page qui apparaît dans l'onglet du navigateur -->
+    
+    <!-- Charge le fichier CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles4.css' %}">
+    <!-- Lien vers le fichier CSS pour styliser la page -->
+    
+    <!-- Charge le fichier JavaScript -->
+    <script src="{% static 'js/script4.js' %}" defer></script>
+    <!-- Lien vers le fichier JavaScript, chargé en différé (après le chargement du HTML) -->
+</head>
+<body>
+    <!-- Corps du document HTML -->
+
+    <!-- Animation de fond -->
+    <div class="hexagonal-grid"></div>
+    <!-- Grille hexagonale pour l'arrière-plan -->
+    <canvas id="dataCanvas"></canvas>
+    <!-- Canvas pour les animations de particules et connexions -->
+    <div class="data-flow-container" id="flowContainer"></div>
+    <!-- Conteneur pour les animations de flux de données -->
+
+    <!-- Barre de navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='/'">Data Platform</div>
+        <!-- Logo de la plateforme avec un lien vers la page d'accueil -->
+        <div class="auth-buttons">
+            <!-- Boutons d'authentification -->
+            <button class="btn btn-primary" onclick="window.location.href='/signup/'">Sign Up</button>
+            <!-- Bouton pour s'inscrire -->
+            <button class="btn btn-secondary" onclick="window.location.href='/signin/'">Sign In</button>
+            <!-- Bouton pour se connecter -->
+            <button class="theme-toggle" id="theme-toggle">🌙</button>
+            <!-- Bouton pour basculer entre les thèmes clair et sombre -->
+        </div>
+    </nav>
+
+    <!-- Formulaire d'inscription -->
+    <section class="auth-section">
+        <div class="auth-container">
+            <h2>Créez votre compte</h2>
+            <!-- Titre du formulaire d'inscription -->
+            <form id="signup-form">
+                <!-- Formulaire d'inscription -->
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <!-- Étiquette pour le champ du nom d'utilisateur -->
+                    <input type="text" id="username" name="username" required>
+                    <!-- Champ pour entrer le nom d'utilisateur -->
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <!-- Étiquette pour le champ de l'email -->
+                    <input type="email" id="email" name="email" required>
+                    <!-- Champ pour entrer l'email -->
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <!-- Étiquette pour le champ du mot de passe -->
+                    <input type="password" id="password" name="password" required>
+                    <!-- Champ pour entrer le mot de passe -->
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirmez le mot de passe</label>
+                    <!-- Étiquette pour le champ de confirmation du mot de passe -->
+                    <input type="password" id="confirm-password" name="confirm_password" required>
+                    <!-- Champ pour confirmer le mot de passe -->
+                </div>
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
+                <!-- Bouton pour soumettre le formulaire -->
+            </form>
+            <p>Vous avez déjà un compte ? <a href="/signin/">Connectez-vous ici</a>.</p>
+            <!-- Lien vers la page de connexion -->
+            <!-- Message d'erreur -->
+            <div id="error-message" class="error-message"></div>
+            <!-- Conteneur pour afficher les messages d'erreur -->
+        </div>
+    </section>
+
+    <script>
+        // Configuration du Canvas pour les particules et connexions
+        const canvas = document.getElementById('dataCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        // Classe pour les particules
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.life = 255;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > width) this.speedX *= -1;
+                if (this.y < 0 || this.y > height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 255, 255, ${this.life / 255})`;
+                ctx.fill();
+            }
+        }
+
+        // Initialisation des particules
+        const particles = Array.from({ length: 100 }, () => new Particle());
+
+        // Animation du canvas
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 31, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            particles.forEach((particle, index) => {
+                particle.update();
+                particle.draw();
+
+                // Dessiner les connexions entre les particules proches
+                for (let j = index + 1; j < particles.length; j++) {
+                    const dx = particles[j].x - particle.x;
+                    const dy = particles[j].y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${(100 - distance) / 500})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Création des ondes WiFi
+        function createWifiWaves() {
+            const container = document.getElementById('flowContainer');
+            const waveCount = 3;
+
+            for (let i = 0; i < waveCount; i++) {
+                const wave = document.createElement('div');
+                wave.className = 'wifi-wave';
+                wave.style.left = '50%';
+                wave.style.top = '50%';
+                wave.style.animationDelay = `${i * 1.5}s`;
+                container.appendChild(wave);
+            }
+        }
+
+        // Création des flux de données
+        function createDataStreams() {
+            const container = document.getElementById('flowContainer');
+            const streamCount = 20;
+
+            for (let i = 0; i < streamCount; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'data-stream';
+                stream.style.top = `${Math.random() * 100}%`;
+                stream.style.left = `${Math.random() * 100}%`;
+                stream.style.width = `${Math.random() * 100 + 50}px`;
+                stream.style.transform = `rotate(${Math.random() * 360}deg)`;
+                stream.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(stream);
+            }
+        }
+
+        // Création des nœuds de connexion
+        function createNodes() {
+            const container = document.getElementById('flowContainer');
+            const nodeCount = 30;
+
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'connection-node';
+                node.style.left = `${Math.random() * 100}%`;
+                node.style.top = `${Math.random() * 100}%`;
+                node.style.animation = `pulse ${1 + Math.random()}s ease-in-out infinite`;
+                container.appendChild(node);
+            }
+        }
+
+        // Initialisation
+        window.addEventListener('load', () => {
+            createWifiWaves();
+            createDataStreams();
+            createNodes();
+            animate();
+        });
+
+        // Gestion du redimensionnement
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // Interaction à la souris
+        let mouseX = 0;
+        let mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Création d'une onde au passage de la souris
+            const wave = document.createElement('div');
+            wave.className = 'wifi-wave';
+            wave.style.left = `${mouseX}px`;
+            wave.style.top = `${mouseY}px`;
+            document.getElementById('flowContainer').appendChild(wave);
+
+            // Suppression de l'onde après l'animation
+            wave.addEventListener('animationend', () => {
+                wave.remove();
+            });
+        });
+    </script>
+</body>
+</html>

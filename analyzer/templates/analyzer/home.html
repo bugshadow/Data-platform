@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!-- Déclaration du type de document comme étant HTML5 -->
+{% load static %}
+<!-- Balise Django pour charger les fichiers statiques (CSS, JS, images, etc.) -->
+<html lang="fr">
+<!-- Début du document HTML avec la langue définie sur le français -->
+<head>
+    <!-- Section d'en-tête du document -->
+    <meta charset="UTF-8">
+    <!-- Définit l'encodage des caractères comme UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Assure que la page est responsive en ajustant la largeur à celle de l'appareil -->
+    <title>Data Analysis Platform</title>
+    <!-- Titre de la page qui apparaît dans l'onglet du navigateur -->
+    
+    <!-- Charge le fichier CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles2.css' %}">
+    <!-- Lien vers le fichier CSS pour styliser la page -->
+    
+    <!-- Charge le fichier JavaScript local avec l'attribut defer -->
+    <script src="{% static 'js/script2.js' %}" defer></script>
+    <!-- Lien vers le fichier JavaScript, chargé en différé (après le chargement du HTML) -->
+</head>
+<body>
+    <!-- Corps du document HTML -->
+
+    <!-- Barre de navigation -->
+    <nav class="navbar">
+        <div class="logo">Data Platform</div>
+        <!-- Logo ou nom de la plateforme -->
+        <div class="auth-buttons">
+            <!-- Boutons d'authentification -->
+            <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a>
+            <!-- Lien vers la page d'inscription -->
+            <a href="{% url 'signin' %}" class="btn btn-secondary">Sign In</a>
+            <!-- Lien vers la page de connexion -->
+            <button class="theme-toggle" id="theme-toggle">🌙</button>
+            <!-- Bouton pour basculer entre les thèmes clair et sombre -->
+        </div>
+    </nav>
+
+    <!-- Section Hero -->
+    <section class="hero-section">
+        <div>
+            <h1>Bienvenue sur notre plateforme</h1>
+            <!-- Titre principal de la section Hero -->
+            <p>Explorez le monde de l'analyse de données et de la science des données</p>
+            <!-- Paragraphe de description -->
+            <div class="animated-text">Data Analysis | Machine Learning | AI Insights</div>
+            <!-- Texte animé pour attirer l'attention -->
+        </div>
+    </section>
+
+    <!-- Section Slider 3D -->
+    <section class="slider-section">
+        <div class="slider">
+            <!-- Conteneur du slider -->
+            <div class="slider-item">
+                <img src="{% static 'image1.png' %}" alt="Image 1">
+                <!-- Première image du slider -->
+            </div>
+            <div class="slider-item">
+                <img src="{% static 'image2.png' %}" alt="Image 2">
+                <!-- Deuxième image du slider -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Citations avec animation de fond -->
+    <section class="quotes-section">
+        <div class="cyber-grid"></div>
+        <!-- Grille cybernétique pour l'arrière-plan -->
+        <div class="plasma-field"></div>
+        <!-- Champ de plasma pour l'animation de fond -->
+        <div class="light-container" id="quotesLightContainer"></div>
+        <!-- Conteneur pour les effets lumineux -->
+        <h2>Citations Inspirantes</h2>
+        <!-- Titre de la section des citations -->
+        <div class="quote-card">
+            <!-- Carte pour une citation -->
+            <p class="quote-text">"Data is the new oil. It’s valuable, but if unrefined, it cannot really be used."</p>
+            <!-- Texte de la citation -->
+            <p class="quote-author">– Clive Humby</p>
+            <!-- Auteur de la citation -->
+        </div>
+        <!-- Répétition de la structure pour d'autres citations -->
+        <div class="quote-card">
+            <p class="quote-text">"Without big data analytics, companies are blind and deaf, wandering out onto the web like deer on a freeway."</p>
+            <p class="quote-author">– Geoffrey Moore</p>
+        </div>
+        <div class="quote-card">
+            <p class="quote-text">"The goal is to turn data into information, and information into insight."</p>
+            <p class="quote-author">– Carly Fiorina</p>
+        </div>
+        <div class="quote-card">
+            <p class="quote-text">"The most valuable commodity I know of is information."</p>
+            <p class="quote-author">– Gordon Gekko</p>
+        </div>
+    </section>
+
+    <!-- Section Contact avec animation de fond -->
+    <section class="contact-section">
+        <div class="cyber-grid"></div>
+        <!-- Grille cybernétique pour l'arrière-plan -->
+        <div class="plasma-field"></div>
+        <!-- Champ de plasma pour l'animation de fond -->
+        <div class="light-container" id="contactLightContainer"></div>
+        <!-- Conteneur pour les effets lumineux -->
+        <h2>Contactez-nous</h2>
+        <!-- Titre de la section de contact -->
+        <div class="contact-cards">
+            <!-- Conteneur pour les cartes de contact -->
+            <div class="contact-card" onclick="window.location.href='mailto:bouhaddachomar@gmail.com'">
+                <!-- Carte de contact pour l'email -->
+                <div class="card-title">
+                    <h3>📧 Email</h3>
+                    <!-- Titre de la carte -->
+                    <div class="date">Disponible 24/7</div>
+                    <!-- Disponibilité -->
+                </div>
+                <p class="description">bouhaddachomar@gmail.com</p>
+                <!-- Description ou adresse email -->
+            </div>
+            <!-- Répétition de la structure pour d'autres moyens de contact -->
+            <div class="contact-card" onclick="window.location.href='https://www.linkedin.com/in/omar-bouhaddach-7420a02b4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app'">
+                <div class="card-title">
+                    <h3>🔗 LinkedIn</h3>
+                    <div class="date">Profil professionnel</div>
+                </div>
+                <p class="description">Omar Bouhaddach</p>
+            </div>
+            <div class="contact-card" onclick="window.location.href='https://github.com/bugshadow'">
+                <div class="card-title">
+                    <h3>🔗 GitHub</h3>
+                    <div class="date">Projets open source</div>
+                </div>
+                <p class="description">bugs-shadow</p>
+            </div>
+            <div class="contact-card" onclick="window.location.href='https://bouhaddach.vercel.app/'">
+                <div class="card-title">
+                    <h3>🌐 Site Web</h3>
+                    <div class="date">Portfolio</div>
+                </div>
+                <p class="description">bouhaddach.vercel.app</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -140,8 +140,8 @@ data-platform/
 
 - **Omar Bouhaddach** - Développeur principal  
   - Contact : [bouhaddachomar@gmail.com](mailto:bouhaddachomar@gmail.com)  
-  - GitHub : [bugs_shadow](https://github.com/bugs_shadow)  
-  - LinkedIn : [omar-bouhaddach](https://www.linkedin.com/in/omar-bouhaddach)  
+  - GitHub : [bugs_shadow](https://github.com/bugshadow)  
+  - LinkedIn : [omar-bouhaddach](https://www.linkedin.com/in/omar-bouhaddach-7420a02b4/)  
 
 ---
 

@@ -109,10 +109,25 @@ def upload_file(request):
             
             # Nettoyage de base des données : remplacer les infinis par NaN
             df = df.replace([np.inf, -np.inf], np.nan)
+
+            # Remplacement des valeurs manquantes
+            for col in df.columns:
+                if df[col].dtype in ['float64', 'int64','float32','int32']:  # Colonnes numériques
+                    median = df[col].median()  # Calculer la médiane
+                    df[col] = df[col].fillna(median)  # Remplacer les NaN par la médiane
+                else:  # Colonnes catégoriques
+                    mode = df[col].mode().iloc[0] if not df[col].mode().empty else None  # Mode (valeur la plus fréquente)
+                    if mode is not None:
+                        df[col] = df[col].fillna(mode)  # Remplacer les NaN par le mode
             
             # Stocker le DataFrame dans la session Django pour une utilisation ultérieure
             request.session['df_json'] = df.to_json(date_format='iso')
-            
+            # L'argument `date_format='iso'` spécifie que si le DataFrame contient des colonnes
+            # avec des données de type datetime (dates et heures), elles seront encodées
+            # au format ISO 8601, qui est un format standard et lisible par les machines.
+            # Exemple de format ISO 8601 : "2025-01-08T15:30:00Z" (date + heure en UTC).
+
+
             # Générer des métadonnées pour chaque colonne
             columns_meta = []
             for col in df.columns:

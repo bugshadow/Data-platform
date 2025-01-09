@@ -159,15 +159,38 @@ function hideLoader() {
     loader.style.display = 'none'; // Cache l'indicateur de chargement
 }
 
+// Fonction pour afficher des notifications personnalisées
+function showNotification(message, type = 'info', duration = 5000) {
+    const notificationContainer = document.getElementById('notification-container');
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <span class="close-btn">&times;</span>
+    `;
+
+    notificationContainer.appendChild(notification);
+
+    // Fermer la notification après la durée spécifiée
+    setTimeout(() => {
+        notification.remove();
+    }, duration);
+
+    // Fermer la notification manuellement
+    notification.querySelector('.close-btn').addEventListener('click', () => {
+        notification.remove();
+    });
+}
+
 function handleFileUpload() {
     const file = fileInput.files[0]; // Récupère le fichier sélectionné
     if (!file) {
-        alert("Aucun fichier sélectionné.");
+        showNotification("Aucun fichier sélectionné.", "error");
         return;
     }
 
     if (file.type !== "text/csv" && !file.name.endsWith('.csv')) {
-        alert("Veuillez sélectionner un fichier CSV valide.");
+        showNotification("Veuillez sélectionner un fichier CSV valide.", "error");
         return;
     }
 
@@ -187,7 +210,7 @@ function handleFileUpload() {
     .then(data => {
         hideLoader();
         if (data.error) {
-            alert(data.error);
+            showNotification(data.error, "error");
             return;
         }
 
@@ -213,11 +236,11 @@ function handleFileUpload() {
         updateDataPreview(data.preview, data.columns.map(column => column.name));
 
         // Afficher un message de succès
-        alert('Fichier CSV importé avec succès !');
+        showNotification('Fichier CSV importé avec succès !', "success");
     })
     .catch(error => {
         hideLoader();
-        alert('Erreur lors de la lecture du fichier CSV : ' + error.message);
+        showNotification('Erreur lors de la lecture du fichier CSV : ' + error.message, "error");
     });
 }
 
@@ -271,7 +294,7 @@ function handleCalculateStats() {
     .then(data => {
         hideLoader();
         if (data.error) {
-            alert(data.error);
+            showNotification(data.error, "error");
             return;
         }
 
@@ -343,7 +366,7 @@ function handleCalculateStats() {
     })
     .catch(error => {
         hideLoader();
-        alert('Erreur lors de la récupération des statistiques : ' + error.message);
+        showNotification('Erreur lors de la récupération des statistiques : ' + error.message, "error");
     });
 }
 
@@ -352,7 +375,7 @@ function handleDisplayData() {
     const columnName = document.getElementById('column-name').value;
 
     if (!rowIndex && !columnName) {
-        alert("Veuillez entrer un index de ligne ou un nom de colonne.");
+        showNotification("Veuillez entrer un index de ligne ou un nom de colonne.", "warning");
         return;
     }
 
@@ -374,7 +397,7 @@ function handleDisplayData() {
     .then(data => {
         hideLoader();
         if (data.error) {
-            alert(data.error);
+            showNotification(data.error, "error");
             return;
         }
 
@@ -395,7 +418,7 @@ function handleDisplayData() {
     })
     .catch(error => {
         hideLoader();
-        alert('Erreur lors de la récupération des données : ' + error.message);
+        showNotification('Erreur lors de la récupération des données : ' + error.message, "error");
     });
 }
 
@@ -418,7 +441,7 @@ function handleGenerateVisualization() {
     .then(data => {
         hideLoader();
         if (data.error) {
-            alert(data.error);
+            showNotification(data.error, "error");
             return;
         }
 
@@ -428,7 +451,7 @@ function handleGenerateVisualization() {
     })
     .catch(error => {
         hideLoader();
-        alert('Erreur lors de la génération de la visualisation : ' + error.message);
+        showNotification('Erreur lors de la génération de la visualisation : ' + error.message, "error");
         noVizMessage.style.display = 'block';
     });
 }
@@ -458,3 +481,63 @@ calculateStatsBtn.addEventListener('click', handleCalculateStats); // Gère le c
 displayDataBtn.addEventListener('click', handleDisplayData); // Gère l'affichage des données
 generateVizBtn.addEventListener('click', handleGenerateVisualization); // Gère la génération de visualisation
 downloadBtn.addEventListener('click', handleDownload); // Gère le téléchargement du fichier CSV
+const dropZone = document.getElementById('drop-zone');
+
+// Gestion du drag & drop
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, preventDefaults);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, highlight);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, unhighlight);
+});
+
+function highlight() {
+    dropZone.classList.add('dragover');
+}
+
+function unhighlight() {
+    dropZone.classList.remove('dragover');
+}
+
+dropZone.addEventListener('drop', handleDrop);
+fileInput.addEventListener('change', handleFileSelect);
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleFiles(files);
+}
+
+function handleFileSelect(e) {
+    const files = e.target.files;
+    handleFiles(files);
+}
+
+// Modifier la fonction handleFiles
+function handleFiles(files) {
+    if (files.length > 0) {
+        const file = files[0];
+        updateFileName(file.name);
+        // Mettre le fichier dans l'input
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
+        // Appeler handleFileUpload sans paramètre
+        handleFileUpload();
+    }
+}
+
+function updateFileName(fileName) {
+    const fileLabel = dropZone.querySelector('.file-label');
+    fileLabel.textContent = fileName;
+}

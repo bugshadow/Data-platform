@@ -31,7 +31,7 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
-    cursor: url('{% static "icons8-katana-sword-30.png" %}'), auto;
+    cursor: url('{% static "css/icon.png" %}'), auto;
 }
 
 .navbar {
@@ -207,7 +207,7 @@ body {
     display: flex;
     flex-direction: column;
     border-radius: var(--border-radius);
-    cursor: url('{% static "icons8-katana-sword-30.png" %}'), auto;
+    cursor: url('{% static "css/icon.png" %}'), auto;
 }
 
 .contact-card .card-title {

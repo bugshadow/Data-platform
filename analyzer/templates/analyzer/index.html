@@ -69,9 +69,16 @@
                 <!-- Titre de la carte -->
                 <div class="form-group">
                     <label class="form-label" for="csv-input">Sélectionnez votre fichier CSV</label>
-                    <!-- Étiquette pour le champ de sélection de fichier -->
-                    <input type="file" id="csv-input" accept=".csv" class="form-control">
-                    <!-- Champ pour sélectionner un fichier CSV -->
+                    <div class="file-upload">
+                        <div class="file-card" id="drop-zone">
+                            <input type="file" id="csv-input" accept=".csv" class="form-control">
+                            <div class="file-content">
+                                <span class="file-icon">📄</span>
+                                <span class="file-label">Glissez-déposez votre fichier CSV</span>
+                                <span class="file-hint">ou cliquez pour parcourir</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button id="upload-btn" class="btn btn-primary">Importer</button>
                 <!-- Bouton pour importer le fichier CSV -->
@@ -203,6 +210,11 @@
         <!-- Indicateur de chargement -->
         <div class="loader" id="loader"></div>
         <!-- Indicateur visuel pour montrer que la page est en cours de chargement -->
+    </div>
+
+    <!-- Conteneur pour les notifications -->
+    <div id="notification-container">
+        <!-- Les notifications seront injectées ici -->
     </div>
 </body>
 </html>
